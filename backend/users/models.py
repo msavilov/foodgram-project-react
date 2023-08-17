@@ -1,8 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
-
-from ..core import costants
 from django.db import models
+
+from ..core import constants
 
 
 class User(AbstractUser):
@@ -15,32 +15,33 @@ class User(AbstractUser):
 
     username = models.CharField(
         verbose_name='Никнейм',
-        max_length=costants.MAX_LEN_FIELD,
+        max_length=constants.MAX_LEN_USER_FIELD,
         unique=True,
-        blank=False,
         validators=RegexValidator(
-            regex=r'^[\w.@+-]+\Z',
-            message=('Введено некорректное значение поля username')),
+            regex=r'^[\w.@+-]+\z',
+            message='Введено некорректное значение поля username'),
     )
     email = models.EmailField(
         verbose_name='Электронная почта',
-        max_length=costants.MAX_MAX_LEN_FIELD,
+        max_length=constants.MAX_LEN_EMAIL,
         db_index=True,
         unique=True,
-        blank=False,
         help_text='Введите адрес электронной почты',
     )
     first_name = models.CharField(
         verbose_name='Имя',
-        max_length=costants.MAX_LEN_FIELD,
-        blank=False,
+        max_length=constants.MAX_LEN_USER_FIELD,
         help_text='Введите своё имя.',
     )
     last_name = models.CharField(
         verbose_name='Фамилия',
-        max_length=costants.MAX_LEN_FIELD,
-        blank=False,
+        max_length=constants.MAX_LEN_USER_FIELD,
         help_text='Введите свою фамилию.',
+    )
+    password = models.CharField(
+        'Пароль',
+        max_length=constants.MAX_LEN_USER_FIELD,
+        help_text='Введите пароль',
     )
 
     class Meta:

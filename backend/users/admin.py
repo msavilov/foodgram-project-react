@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import register
 
-from ..core import costants
+from ..core import constants
 from .models import Follow, User
 
 
@@ -27,7 +27,7 @@ class FollowAdmin(admin.ModelAdmin):
                     'author',
                     'user',
                     'created',)
-    search_fields = ('user__email',
-                     'author__email',)
-    list_per_page = costants.PER_PAGE
+    search_fields = ('user',
+                     'author',)
+    list_per_page = constants.ITEM_PER_PAGE_ADMIN
     save_on_top = True

@@ -1,7 +1,6 @@
 import os
 
 from dotenv import load_dotenv
-from pathlib import Path
 
 load_dotenv()
 
@@ -9,8 +8,9 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'DEFAULT_KEY')
 
 DEBUG = os.getenv('DEBUG') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
-
+ALLOWED_HOSTS = os.getenv(
+    'ALLOWED_HOSTS',
+    default='localhost,127.0.0.1').split(',')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -92,6 +92,5 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
