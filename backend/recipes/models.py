@@ -143,7 +143,7 @@ class IngredientInRecipe(models.Model):
 
 
 class RecipeUser(models.Model):
-    """Родитель для классов Favorite и ShoppingList"""
+    """Абстрактный класс для Favorite и ShoppingList"""
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
@@ -157,7 +157,7 @@ class RecipeUser(models.Model):
 
     class Meta:
         abstract = True
-        ordering = ('user', 'recipe')
+        ordering = ('recipe', 'user')
 
 
 class Favorite(RecipeUser):
