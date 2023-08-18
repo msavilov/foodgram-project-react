@@ -10,6 +10,7 @@ class User(AbstractUser):
 
     class Roles(models.TextChoices):
         """Класс для роли пользователя."""
+        GUEST = 'guest'
         USER = 'user'
         ADMIN = 'admin'
 

@@ -11,12 +11,13 @@ class UserAdmin(admin.ModelAdmin):
                     'username',
                     'first_name',
                     'last_name',
-                    'email',)
+                    'email',
+                    'password')
     search_fields = ('username',
                      'first_name',
                      'last_name',
                      'email',)
-    list_filter = ('first_name',
+    list_filter = ('username',
                    'email',)
     save_on_top = True
 
