@@ -22,9 +22,10 @@ class IngredientInRecipeAdmin(admin.StackedInline):
 @admin.register(models.Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     inlines = (IngredientInRecipeAdmin,)
-    list_display = ('name', 'author__username', 'get_favorite_count')
-    search_fields = ('author__username', 'name', 'tags')
+    list_display = ('name', 'author', 'get_favorite_count')
+    search_fields = ('author__username', 'name', 'tags__name')
     list_filter = ('pub_date', 'tags')
+    save_on_top = True
 
     @admin.display(
         description='Электронная почта автора'
@@ -57,6 +58,6 @@ class FavoriteAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.ShoppingList)
-class ShoppingCartAdmin(admin.ModelAdmin):
+class ShoppingListAdmin(admin.ModelAdmin):
     ordering = ('user',)
     search_fields = ('recipe', 'user')
