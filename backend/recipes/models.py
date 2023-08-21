@@ -1,8 +1,7 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core import validators
 from django.db import models
-
-from ..core import constants
 
 User = get_user_model()
 
@@ -11,11 +10,11 @@ class Ingredient(models.Model):
     """Модель Ингредиент"""
     name = models.CharField(
         'Название ингредиента',
-        max_length=constants.MAX_LEN_RECIPES,
+        max_length=settings.MAX_LEN_RECIPES,
     )
     measurement_unit = models.CharField(
         'Единица измерения ингредиента',
-        max_length=constants.MAX_LEN_RECIPES,
+        max_length=settings.MAX_LEN_RECIPES,
     )
 
     class Meta:
@@ -31,21 +30,21 @@ class Tag(models.Model):
     """Модель Тег"""
     name = models.CharField(
         'Название',
-        max_length=constants.MAX_LEN_RECIPES,
+        max_length=settings.MAX_LEN_RECIPES,
         unique=True,
     )
     color = models.CharField(
         'Цветовой HEX-код',
-        max_length=constants.LEN_HEX_CODE,
+        max_length=settings.LEN_HEX_CODE,
         unique=True,
     )
     slug = models.SlugField(
         'Slug',
-        max_length=constants.MAX_LEN_RECIPES,
+        max_length=settings.MAX_LEN_RECIPES,
         unique=True,
-        validators=validators.RegexValidator(
-            regex=r'^[-a-zA-Z0-9_]+$',
-            message='Введено некорректное значение поля name'),
+        # validators=validators.RegexValidator(
+        #     regex=r'^[-a-zA-Z0-9_]+$',
+        #     message='Введено некорректное значение поля name'),
     )
 
     class Meta:
@@ -80,15 +79,15 @@ class Recipe(models.Model):
     )
     name = models.CharField(
         'Название рецепта',
-        max_length=constants.MAX_LEN_RECIPES,
+        max_length=settings.MAX_LEN_RECIPES,
     )
     text = models.TextField('Описание рецепта')
     cooking_time = models.PositiveIntegerField(
         verbose_name='Время приготовления в минутах',
         validators=[validators.MinValueValidator(
-            constants.MIN_COOKING_TIME,
+            settings.MIN_COOKING_TIME,
             message=(f'Минимальное время приготовления: '
-                     f'{constants.MIN_COOKING_TIME} минута!')),
+                     f'{settings.MIN_COOKING_TIME} минута!')),
                     ]
     )
     pub_date = models.DateTimeField('Дата публикации',
@@ -119,12 +118,12 @@ class IngredientInRecipe(models.Model):
         related_name='recipe_ingredients',
     )
     amount = models.PositiveIntegerField(
-        default=constants.MIN_INGREDIENT_AMOUNT,
+        default=settings.MIN_INGREDIENT_AMOUNT,
         validators=(
             validators.MinValueValidator(
-                constants.MIN_INGREDIENT_AMOUNT,
+                settings.MIN_INGREDIENT_AMOUNT,
                 message=(f'Минимальное количество ингредиентов'
-                         f'`{constants.MIN_INGREDIENT_AMOUNT}` !')
+                         f'`{settings.MIN_INGREDIENT_AMOUNT}` !')
             ),
         ),
         verbose_name='Количество',
@@ -167,10 +166,10 @@ class Favorite(RecipeUser):
         default_related_name = 'favorites'
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранные'
-        constraints = models.UniqueConstraint(
-            fields=['recipe', 'user'],
-            name='unique_favorite_user',
-        )
+        # constraints = models.UniqueConstraint(
+        #     fields=['recipe', 'user'],
+        #     name='unique_favorite_user',
+        # )
 
     def __str__(self):
         return (f'Пользователь {self.user.username} '
@@ -183,12 +182,12 @@ class ShoppingList(RecipeUser):
         default_related_name = 'shopping_list'
         verbose_name = 'Покупка'
         verbose_name_plural = 'Покупки'
-        constraints = (
-            models.UniqueConstraint(
-                fields=['recipe', 'user'],
-                name='unique_shopping_list_user'
-            ),
-        )
+        # constraints = (
+        #     models.UniqueConstraint(
+        #         fields=['recipe', 'user'],
+        #         name='unique_shopping_list_user'
+        #     ),
+        # )
 
     def __str__(self):
         return (f'Пользователь {self.user} '

@@ -1,25 +1,33 @@
-import models
 from django.contrib import admin
 
+from .models import (
+    Ingredient,
+    IngredientInRecipe,
+    Favorite,
+    Recipe,
+    ShoppingList,
+    Tag
+)
 
-@admin.register(models.Ingredient)
+
+@admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ('name', 'measurement_unit')
     search_fields = ('name',)
 
 
-@admin.register(models.Tag)
+@admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'color', 'slug',)
     search_fields = ('name',)
 
 
 class IngredientInRecipeAdmin(admin.StackedInline):
-    model = models.IngredientInRecipe
+    model = IngredientInRecipe
     autocomplete_fields = ('ingredient',)
 
 
-@admin.register(models.Recipe)
+@admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     inlines = (IngredientInRecipeAdmin,)
     list_display = ('name', 'author', 'get_favorite_count')
@@ -51,13 +59,13 @@ class RecipeAdmin(admin.ModelAdmin):
         return obj.favorites.count()
 
 
-@admin.register(models.Favorite)
+@admin.register(Favorite)
 class FavoriteAdmin(admin.ModelAdmin):
     ordering = ('user',)
     search_fields = ('recipe', 'user')
 
 
-@admin.register(models.ShoppingList)
+@admin.register(ShoppingList)
 class ShoppingListAdmin(admin.ModelAdmin):
     ordering = ('user',)
     search_fields = ('recipe', 'user')

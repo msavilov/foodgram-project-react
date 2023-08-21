@@ -1,7 +1,7 @@
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin import register
 
-from ..core import constants
 from .models import Follow, User
 
 
@@ -30,5 +30,5 @@ class FollowAdmin(admin.ModelAdmin):
                     'created',)
     search_fields = ('user',
                      'author',)
-    list_per_page = constants.ITEM_PER_PAGE_ADMIN
+    list_per_page = settings.ITEM_PER_PAGE_ADMIN
     save_on_top = True
