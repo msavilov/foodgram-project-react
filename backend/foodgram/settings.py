@@ -16,7 +16,6 @@ MIN_COOKING_TIME = 1
 LEN_HEX_CODE = 7
 
 
-
 load_dotenv()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

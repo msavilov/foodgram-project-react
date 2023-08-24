@@ -4,8 +4,6 @@ from django.db.models import F
 from django.shortcuts import get_object_or_404
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from drf_extra_fields.fields import Base64ImageField
-from recipes.models import (IngredientInRecipe, Favorite, Ingredient, Recipe,
-                            ShoppingCart, Tag)
 from rest_framework import validators
 from rest_framework.serializers import (CharField, EmailField, Field,
                                         IntegerField, ModelSerializer,
@@ -13,6 +11,9 @@ from rest_framework.serializers import (CharField, EmailField, Field,
                                         Serializer, SerializerMethodField,
                                         ValidationError)
 from rest_framework.validators import UniqueValidator
+
+from recipes.models import (Favorite, Ingredient, IngredientInRecipe, Recipe,
+                            ShoppingCart, Tag)
 from users.models import Subscribe, User
 
 
@@ -240,7 +241,8 @@ class FollowSerializer(ModelSerializer):
         return Recipe.objects.filter(author=obj.author).count()
 
     def get_is_subscribed(self, obj):
-        return Subscribe.objects.filter(user=obj.user, author=obj.author).exists()
+        return Subscribe.objects.filter(user=obj.user,
+                                        author=obj.author).exists()
 
 
 class UserPasswordSerializer(Serializer):

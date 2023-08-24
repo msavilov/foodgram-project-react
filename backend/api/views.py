@@ -2,8 +2,6 @@ from django.db.models import Sum
 from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
-from recipes.models import (IngredientInRecipe, Favorite, Ingredient, Recipe,
-                            ShoppingCart, Tag)
 from rest_framework import filters, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -15,11 +13,14 @@ from api.filters import IngredientSearchFilter, RecipesFilter
 from api.pagination import LimitPagePagination
 from api.permissions import AdminOrAuthor, AdminOrReadOnly
 from api.serializers import (FollowSerializer, IngredientSerializer,
-                          RecipeCreateSerializer, RecipeForFollowersSerializer,
-                          RecipeSerializer, TagSerializer, UserPasswordSerializer, 
-                          UsersSerializer)
-
+                             RecipeCreateSerializer,
+                             RecipeForFollowersSerializer, RecipeSerializer,
+                             TagSerializer, UserPasswordSerializer,
+                             UsersSerializer)
+from recipes.models import (Favorite, Ingredient, IngredientInRecipe, Recipe,
+                            ShoppingCart, Tag)
 from users.models import Subscribe, User
+
 
 class UsersViewSet(UserViewSet):
     """Вьюсет для модели пользователей."""
@@ -36,14 +37,14 @@ class UsersViewSet(UserViewSet):
             return Response({'message': 'Нельзя подписаться на себя'},
                             status=status.HTTP_400_BAD_REQUEST)
         follow = Subscribe.objects.get_or_create(user=self.request.user,
-                                              author=follower)
+                                                 author=follower)
         serializer = FollowSerializer(follow[0])
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def unsubscribed(self, serializer, id=None):
         follower = get_object_or_404(User, id=id)
         Subscribe.objects.filter(user=self.request.user,
-                              author=follower).delete()
+                                 author=follower).delete()
         return Response({'message': 'Вы успешно отписаны'},
                         status=status.HTTP_200_OK)
 
@@ -153,8 +154,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         response = HttpResponse(shopping_cart, content_type='text/plain')
         filename = 'shopping_list.txt'
         response['Content-Disposition'] = (
-            f'attachment; filename={0}'.format(filename)
-            )
+            f'attachment; filename={0}'.format(filename))
         return response
 
 

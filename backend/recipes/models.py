@@ -140,7 +140,6 @@ class IngredientInRecipe(models.Model):
         return f'{self.amount} {self.ingredients}'
 
 
-
 class Favorite(models.Model):
     """Модель списка избранного"""
     user = models.ForeignKey(User,
@@ -153,8 +152,7 @@ class Favorite(models.Model):
                                related_name='favorite')
     constraints = (models.UniqueConstraint(
         fields=['recipe', 'user'],
-        name='unique_favorite_user'),
-        )
+        name='unique_favorite_user'))
 
     class Meta:
         verbose_name = 'Избранный рецепт'
@@ -178,8 +176,7 @@ class ShoppingCart(models.Model):
                                related_name='shopping_cart')
     constraints = (models.UniqueConstraint(
         fields=['recipe', 'user'],
-        name='unique_shopping_cart_user'),
-        )
+        name='unique_shopping_cart_user'))
 
     class Meta:
         verbose_name = 'Список покупок'
