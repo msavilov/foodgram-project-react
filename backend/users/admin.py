@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin import register
 
-from .models import Follow, User
+from users.models import Follow, User
 
 
 @register(User)

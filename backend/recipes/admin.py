@@ -1,12 +1,12 @@
 from django.contrib import admin
 
-from .models import (
+from recipes.models import (
     Ingredient,
     IngredientInRecipe,
     Favorite,
     Recipe,
     ShoppingList,
-    Tag
+    Tag,
 )
 
 
@@ -18,7 +18,7 @@ class IngredientAdmin(admin.ModelAdmin):
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('name', 'color', 'slug',)
+    list_display = ('name', 'color', 'slug')
     search_fields = ('name',)
 
 

@@ -9,10 +9,11 @@ class Command(BaseCommand):
     """Выгрузка первоначальных данных в DB-проекта"""
     def handle(self, *args, **options):
         try:
-            with open('./data/ingredients.csv', encoding='utf-8') as file:
+            with open('data/ingredients.csv',
+                      encoding='utf-8') as file:
                 file_reader = csv.reader(file)
-                for row in file_reader:
-                    name, measurement_unit = row
+                for ingredient in file_reader:
+                    name, measurement_unit = ingredient
                     Ingredient.objects.get_or_create(
                         name=name,
                         measurement_unit=measurement_unit)

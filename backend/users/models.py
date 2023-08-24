@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
-# from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator
 from django.db import models
 
 
@@ -14,27 +14,27 @@ class User(AbstractUser):
         ADMIN = 'admin'
 
     username = models.CharField(
-        verbose_name='Никнейм',
+        'Никнейм',
         max_length=settings.MAX_LEN_USER_FIELD,
         unique=True,
-        # validators=(RegexValidator(
-        #     regex=r'^[\w.@+-]+\z',
-        #     message='Введено некорректное значение поля username')),
+        validators=[RegexValidator(
+            regex=r'^[\w.@+-]+\Z',
+            message='Введено некорректное значение поля username')],
     )
     email = models.EmailField(
-        verbose_name='Электронная почта',
+        'Электронная почта',
         max_length=settings.MAX_LEN_EMAIL,
         db_index=True,
         unique=True,
         help_text='Введите адрес электронной почты',
     )
     first_name = models.CharField(
-        verbose_name='Имя',
+        'Имя',
         max_length=settings.MAX_LEN_USER_FIELD,
         help_text='Введите своё имя.',
     )
     last_name = models.CharField(
-        verbose_name='Фамилия',
+        'Фамилия',
         max_length=settings.MAX_LEN_USER_FIELD,
         help_text='Введите свою фамилию.',
     )
@@ -85,11 +85,15 @@ class Follow(models.Model):
         verbose_name = 'Подписчик'
         verbose_name_plural = 'Подписчики'
         ordering = ('-id',)
-        # constraints = models.UniqueConstraint(
-        #         fields=['user', 'author'],
-        #         name='unique_follow',
-        # )
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'author'],
+                name='unique_follow'),
+            models.CheckConstraint(
+                check=~models.Q(user=models.F('author')),
+                name='Нельзя подписаться на себя')
+        ]
 
     def __str__(self):
-        return (f'Пользователь {self.user.username}'
-                f' подписался на {self.author.username}')
+        return (f'Пользователь {self.user}'
+                f' подписался на {self.author}')

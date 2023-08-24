@@ -42,9 +42,9 @@ class Tag(models.Model):
         'Slug',
         max_length=settings.MAX_LEN_RECIPES,
         unique=True,
-        # validators=validators.RegexValidator(
-        #     regex=r'^[-a-zA-Z0-9_]+$',
-        #     message='Введено некорректное значение поля name'),
+        validators=[validators.RegexValidator(
+            regex=r'^[-a-zA-Z0-9_]+$',
+            message='Введено некорректное значение поля name')],
     )
 
     class Meta:
@@ -119,24 +119,24 @@ class IngredientInRecipe(models.Model):
     )
     amount = models.PositiveIntegerField(
         default=settings.MIN_INGREDIENT_AMOUNT,
-        validators=(
+        validators=[
             validators.MinValueValidator(
                 settings.MIN_INGREDIENT_AMOUNT,
                 message=(f'Минимальное количество ингредиентов'
                          f'`{settings.MIN_INGREDIENT_AMOUNT}` !')
             ),
-        ),
+        ],
         verbose_name='Количество',
     )
 
     class Meta:
         verbose_name = 'Количество ингредиента'
         verbose_name_plural = 'Количество ингредиентов'
-        constraints = (
+        constraints = [
             models.UniqueConstraint(
                 fields=['recipe', 'ingredient'],
                 name='unique_recipe_and_ingredient'),
-        )
+        ]
 
     def __str__(self) -> str:
         return f'{self.amount} {self.ingredient}'
@@ -166,10 +166,10 @@ class Favorite(RecipeUser):
         default_related_name = 'favorites'
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранные'
-        # constraints = models.UniqueConstraint(
-        #     fields=['recipe', 'user'],
-        #     name='unique_favorite_user',
-        # )
+        constraints = (models.UniqueConstraint(
+            fields=['recipe', 'user'],
+            name='unique_favorite_user'),
+        )
 
     def __str__(self):
         return (f'Пользователь {self.user.username} '
@@ -182,12 +182,12 @@ class ShoppingList(RecipeUser):
         default_related_name = 'shopping_list'
         verbose_name = 'Покупка'
         verbose_name_plural = 'Покупки'
-        # constraints = (
-        #     models.UniqueConstraint(
-        #         fields=['recipe', 'user'],
-        #         name='unique_shopping_list_user'
-        #     ),
-        # )
+        constraints = (
+            models.UniqueConstraint(
+                fields=['recipe', 'user'],
+                name='unique_shopping_list_user'
+            ),
+        )
 
     def __str__(self):
         return (f'Пользователь {self.user} '
