@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin import register
 
-from users.models import Follow, User
+from users.models import Subscribe, User
 
 
 @register(User)
@@ -22,8 +22,8 @@ class UserAdmin(admin.ModelAdmin):
     save_on_top = True
 
 
-@register(Follow)
-class FollowAdmin(admin.ModelAdmin):
+@register(Subscribe)
+class SubscribeAdmin(admin.ModelAdmin):
     list_display = ('id',
                     'author',
                     'user',

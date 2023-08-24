@@ -62,18 +62,18 @@ class User(AbstractUser):
         return f'{self.username}: {self.email}.'
 
 
-class Follow(models.Model):
+class Subscribe(models.Model):
     """Модель для подписчика"""
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='follower',
+        related_name='subscriber',
         verbose_name='Подписчик',
     )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='following',
+        related_name='subscribing',
         verbose_name='Автор',
     )
     created = models.DateTimeField(
@@ -88,7 +88,7 @@ class Follow(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=['user', 'author'],
-                name='unique_follow'),
+                name='unique_subscriber'),
             models.CheckConstraint(
                 check=~models.Q(user=models.F('author')),
                 name='Нельзя подписаться на себя')

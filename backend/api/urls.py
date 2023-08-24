@@ -2,21 +2,21 @@ from rest_framework import routers
 from django.urls import path, include
 
 from api.views import (
-    IngredientsViewSet,
-    RecipesViewSet,
+    IngredientViewSet,
+    RecipeViewSet,
+    TagViewSet,
+    UsersViewSet,
     SetPasswordView,
-    TagsViewSet,
-    UserViewSet
 )
 
 app_name = 'api'
 
 router = routers.DefaultRouter()
 
-router.register('ingredients', IngredientsViewSet, basename='ingredients')
-router.register('recipes', RecipesViewSet, basename='recipes')
-router.register('tags', TagsViewSet, basename='tags')
-router.register('users', UserViewSet, basename='users')
+router.register('users', UsersViewSet, basename='users')
+router.register('tags', TagViewSet, basename='tags')
+router.register('ingredients', IngredientViewSet, basename='ingredients')
+router.register('recipes', RecipeViewSet, basename='recipes')
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -5,7 +5,7 @@ from recipes.models import (
     IngredientInRecipe,
     Favorite,
     Recipe,
-    ShoppingList,
+    ShoppingCart,
     Tag,
 )
 
@@ -24,7 +24,7 @@ class TagAdmin(admin.ModelAdmin):
 
 class IngredientInRecipeAdmin(admin.StackedInline):
     model = IngredientInRecipe
-    autocomplete_fields = ('ingredient',)
+    autocomplete_fields = ('ingredients',)
 
 
 @admin.register(Recipe)
@@ -48,11 +48,11 @@ class RecipeAdmin(admin.ModelAdmin):
     @admin.display(description='Ингредиенты')
     def get_ingredients(self, obj):
         return '\n '.join([
-            f'{item["ingredient__name"]} - {item["amount"]}'
-            f' {item["ingredient__measurement_unit"]}.'
+            f'{item["ingredients__name"]} - {item["amount"]}'
+            f' {item["ingredients__measurement_unit"]}.'
             for item in obj.recipes.values(
-                'ingredient__name',
-                'amount', 'ingredient__measurement_unit')])
+                'ingredients__name',
+                'amount', 'ingredients__measurement_unit')])
 
     @admin.display(description='В избранном')
     def get_favorite_count(self, obj):
@@ -65,7 +65,7 @@ class FavoriteAdmin(admin.ModelAdmin):
     search_fields = ('recipe', 'user')
 
 
-@admin.register(ShoppingList)
-class ShoppingListAdmin(admin.ModelAdmin):
+@admin.register(ShoppingCart)
+class ShoppingCarsAdmin(admin.ModelAdmin):
     ordering = ('user',)
     search_fields = ('recipe', 'user')
