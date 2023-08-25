@@ -1,2 +1,2 @@
 run:
-	gunicorn --bind 0.0.0.0:${NGINX_PORT} foodgram.wsgi
+	gunicorn --bind 0.0.0.0:${GUNICORN_PORT} foodgram.wsgi
