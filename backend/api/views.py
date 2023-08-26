@@ -5,12 +5,12 @@ from djoser.views import UserViewSet
 from rest_framework import filters, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.filters import IngredientSearchFilter, RecipesFilter
-from api.pagination import LimitPagePagination
 from api.permissions import AdminOrAuthor, AdminOrReadOnly
 from api.serializers import (FollowSerializer, IngredientSerializer,
                              RecipeCreateSerializer,
@@ -26,7 +26,7 @@ class UsersViewSet(UserViewSet):
     """Вьюсет для модели пользователей."""
     queryset = User.objects.all()
     serializer_class = UsersSerializer
-    pagination_class = LimitPagePagination
+    pagination_class = PageNumberPagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('username', 'email')
     permission_classes = (AllowAny, )
@@ -86,7 +86,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     """Вьюсет для рецептов."""
     queryset = Recipe.objects.all()
     permission_classes = (AdminOrAuthor,)
-    pagination_class = LimitPagePagination
+    pagination_class = PageNumberPagination
     filter_backends = (DjangoFilterBackend,)
     filterset_class = RecipesFilter
 

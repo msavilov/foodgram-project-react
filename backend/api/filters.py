@@ -6,7 +6,7 @@ from recipes.models import Recipe
 
 
 class RecipesFilter(FilterSet):
-    """"Фильтр для сортировки рецептов"""""
+    """"Фильтр для сортировки рецептов."""""
     tags = AllValuesMultipleFilter(field_name='tags__slug',
                                    label='tags')
     favorite = BooleanFilter(method='get_favorite')

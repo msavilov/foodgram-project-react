@@ -21,6 +21,10 @@ class Ingredient(models.Model):
         ordering = ('name',)
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['name', 'measurement_unit'],
+                name='unique_ingredient_measurement_unit')]
 
     def __str__(self):
         return f'{self.name}, {self.measurement_unit}.'
@@ -86,7 +90,10 @@ class Recipe(models.Model):
             settings.MIN_COOKING_TIME,
             message=(f'Минимальное время приготовления: '
                      f'{settings.MIN_COOKING_TIME} минута!')),
-                    ]
+                    validators.MaxValueValidator(
+            settings.MAX_COOKING_TIME,
+            message=(f'Максимальное время приготовления: '
+                     f'{settings.MAX_COOKING_TIME} минут!')),]
     )
     pub_date = models.DateTimeField('Дата публикации',
                                     auto_now_add=True)
@@ -122,6 +129,11 @@ class IngredientInRecipe(models.Model):
                 settings.MIN_INGREDIENT_AMOUNT,
                 message=(f'Минимальное количество ингредиентов'
                          f'`{settings.MIN_INGREDIENT_AMOUNT}` !')
+            ),
+            validators.MaxValueValidator(
+                settings.MAX_INGREDIENT_AMOUNT,
+                message=(f'Максимальное количество ингредиентов'
+                         f'`{settings.MAX_INGREDIENT_AMOUNT}` !')
             ),
         ],
         verbose_name='Количество',

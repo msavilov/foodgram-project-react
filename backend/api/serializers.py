@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import make_password
+from django.db import transaction
 from django.db.models import F
-from django.shortcuts import get_object_or_404
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import validators
@@ -130,7 +130,6 @@ class RecipeCreateSerializer(ModelSerializer):
                                   many=True)
     image = Base64ImageField()
     name = CharField(max_length=200)
-    cooking_time = IntegerField()
     author = UserSerializer(read_only=True)
 
     class Meta:
@@ -145,15 +144,16 @@ class RecipeCreateSerializer(ModelSerializer):
             amount = ingredient['amount']
             if IngredientInRecipe.objects.filter(
                     recipe=recipe,
-                    ingredients=get_object_or_404(
-                        Ingredient, id=ingredient['id'])).exists():
+                    ingredients=Ingredient.objects.get(
+                    ingredients__id=ingredient['id'])):
                 amount += F('amount')
             IngredientInRecipe.objects.update_or_create(
                 recipe=recipe,
-                ingredients=get_object_or_404(
-                    Ingredient, id=ingredient['id']),
+                ingredients=Ingredient.objects.get(
+                    ingredients__id=ingredient['id']),
                 defaults={'amount': amount})
 
+    @transaction.atomic
     def create(self, validated_data):
         tags_data = validated_data.pop('tags')
         ingredients_data = validated_data.pop('ingredients')
@@ -164,6 +164,7 @@ class RecipeCreateSerializer(ModelSerializer):
         recipe.tags.set(tags_data)
         return recipe
 
+    @transaction.atomic
     def update(self, recipe, validated_data):
         ingredients = validated_data.pop('ingredients')
         tags = validated_data.pop('tags')
@@ -177,11 +178,6 @@ class RecipeCreateSerializer(ModelSerializer):
             recipe,
             context={'request': self.context.get('request')}).data
         return data
-
-    def validate_cooking_time(self, cooking_time):
-        if cooking_time <= 0:
-            raise ValidationError('Время приготовления должно быть больше 0')
-        return cooking_time
 
     def validate_ingredients(self, ingredients):
         for ingredient in ingredients:
