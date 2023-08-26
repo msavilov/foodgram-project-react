@@ -93,7 +93,7 @@ class Recipe(models.Model):
                     validators.MaxValueValidator(
             settings.MAX_COOKING_TIME,
             message=(f'Максимальное время приготовления: '
-                     f'{settings.MAX_COOKING_TIME} минут!')),]
+                     f'{settings.MAX_COOKING_TIME} минут!')), ]
     )
     pub_date = models.DateTimeField('Дата публикации',
                                     auto_now_add=True)
